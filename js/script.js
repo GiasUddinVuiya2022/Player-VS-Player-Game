@@ -15,13 +15,24 @@ const player2ScoreElm = document.querySelector('#player2ScoreElm');
 
 const errorMessageElm1 = document.querySelector('.errorMessages1');
 const errorMessages2 = document.querySelector('.errorMessages2');
-
 const successMessElm = document.querySelector('.successMessage');
+
 // data layer start here
 let score = 10;
 let p1Score = 0;
 let p2Score = 0;
 let turn = 'player1';
+
+// random number generation start here
+function generateRandomNumber(maximumNum)
+{
+    return Math.ceil(Math.random() * maximumNum);
+}
+
+const player1_and_player2_soundEffect = new Audio('https://www.fesliyanstudios.com/play-mp3/387');
+const reset_message_sound_effect = new Audio('../practice-player-vs-player/sound/reset-button.mp3');
+const submit_button_sound_effect = new Audio('../practice-player-vs-player/sound/click-button.mp3')
+const success_button_sound_effect = new Audio('../practice-player-vs-player/sound/success-tune.mp3');
 // view layer start here
 function viewLayer()
 {
@@ -34,27 +45,42 @@ viewLayer();
 btnElm.addEventListener('click',(evt) => 
 {
     evt.preventDefault();
+    // button sound effect 
+    submit_button_sound_effect.play();
+    // end 
     // adding item to ui
     addItemToUI();
     // input box validation start here
     inputBoxValidation();
     // reseet input box
     resetInput();
-   
+    //  reset all element when submit button is click game will be start again
+    resetPlayer1_and_player2_score();
 });
+// reset p1 and p2 score 
+function resetPlayer1_and_player2_score()
+{
+    resetP1AndP2Score();
+    resetPlayer1_Player2Btn();
+    resetSuccessMessageAndError();
+}
 // player one button start here
 p1BtnElm.addEventListener('click',(evt) => 
 {
     evt.preventDefault();
+    // button sound effect
+    player1_and_player2_soundEffect.play();
+    // end
    if(turn === 'player1')
    {
-      p1Score++;
+      p1Score = generateRandomNumber(score);
       player1ScoreElm.textContent = p1Score;
       p1BtnElm.setAttribute('disabled','disabled');
       p2BtnElm.removeAttribute('disabled')
 
       turn = 'player2';
    }
+  
     // success message it means who will be success p1 or p2
     successMess()
 });
@@ -63,9 +89,12 @@ p1BtnElm.addEventListener('click',(evt) =>
 p2BtnElm.addEventListener('click',(evt) => 
 {
     evt.preventDefault();
+    // button sound effect
+    player1_and_player2_soundEffect.play();
+    // end 
     if(turn === 'player2')
     {
-        p2Score++;
+        p2Score = generateRandomNumber(score);
         player2ScoreElm.textContent = p2Score;
         p2BtnElm.setAttribute('disabled','disabled');
         p1BtnElm.removeAttribute('disabled');
@@ -80,7 +109,9 @@ p2BtnElm.addEventListener('click',(evt) =>
 resetBtnElm.addEventListener('click',(evt) => 
 {
     evt.preventDefault();
-
+    // reset button sound effect
+    reset_message_sound_effect.play();
+    // end
     score = 10;
     mainScoreElm.textContent = score;
     //  reset all the thing start here now
@@ -89,6 +120,7 @@ resetBtnElm.addEventListener('click',(evt) =>
     resetPlayer1_Player2Btn();
     // reset success message 
     resetSuccessMessageAndError();
+    
 })
 // reset success message 
 function resetSuccessMessageAndError()
@@ -120,11 +152,15 @@ function successMess()
     if(p1Success)
     {
         successMessElm.textContent = ('Player one is success');
+        // success sound effect
+        success_button_sound_effect.play();
         p1BtnElm.setAttribute('disabled','disabled');
         p2BtnElm.setAttribute('disabled','disabled');
     }else if(p2Success)
     {
         successMessElm.textContent = ('Player two is success');
+        // success sound effect 
+        success_button_sound_effect.play();
         p1BtnElm.setAttribute('disabled','disabled');
         p2BtnElm.setAttribute('disabled','disabled');
     }
@@ -167,6 +203,12 @@ function addItemToUI()
     mainScoreElm.textContent = score;
 }
 
-
-
-
+// Generate random number 
+/*
+function randomNumberGenerate(max)
+{
+   return Math.ceil(Math.random() * max)
+}
+const result = randomNumberGenerate(10);
+console.log(result)
+*/ 
